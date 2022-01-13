@@ -39,6 +39,15 @@ def userList():
     data=recommend.getUsers()
     return data
 
+@app.route('/ItemRecommendation', methods = ['POST'])
+def ItemRecommendation():
+        sentText = request.args.get("param1")
+        print(sentText)
+        data=recommend.finditemRecommendation(sentText)  
+        print("=====================")
+        print(data) 
+        return data
+
 @app.route('/SentimentAnalysis', methods = ['POST'])
 def SentimentAnalysis():
     flag = True
@@ -60,6 +69,8 @@ def UserRecommendation():
         return data
     except Error:
         abort (500)
+
+
 
 @app.errorhandler(404)
 def page_not_found(error):

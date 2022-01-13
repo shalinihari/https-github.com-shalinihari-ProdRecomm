@@ -59,14 +59,15 @@
             targeturl = '/UserRecommendation?param1='+Inp_Value;
         }
         if(selectedOption == "ItemRecommendation"){
-            targeturl = '/dummy?param1='+Inp_Value;
+            
+            targeturl = '/ItemRecommendation?param1='+Inp_Value;
         }
         $.ajax({
                  url: targeturl,
                  type: 'POST',                 
                  success: function(result) {
                     document.getElementById("sentiment_value").innerHTML =""    
-                    if(selectedOption == "UserRecommendation"){
+                    if(selectedOption == "UserRecommendation" | selectedOption == "ItemRecommendation"){
                         if(result == ""){
                             alert("User not found  ");
                             return

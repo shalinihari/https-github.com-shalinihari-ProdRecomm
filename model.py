@@ -34,22 +34,41 @@ class Recommendation:
             print("username not found")
             return "User not Found"
         return
+    
+    def finditemRecommendation(self, user):
+        name = [];
+        flag = False
+        tops=pd.read_pickle('./top5ItemClassifier.pkl')
+        raw_data = pd.read_csv("./sample30.csv")
+        test_df = raw_data[['id','name','manufacturer','brand']]
+        test_df = test_df.drop_duplicates()
+        print("Inside the item recommendation function")
+        print(test_df.head())
+        for uid, user_rating in tops.items():
+            if uid==user:
+                itemList = [iid for (iid,rating) in user_rating]
+                print(itemList)
+                
+                json = test_df[test_df['id'].isin(itemList)].to_json(orient='records')
+                flag = True
+                return json
+        if(flag == False):
+            return ""
+        return 
 
     def finduserRecommendation(self, user):
         name = [];
         flag = False
         tops=pd.read_pickle('./top5Classifier.pkl')
         raw_data = pd.read_csv("./sample30.csv")
-        
+        test_df = raw_data[['id','name','manufacturer','brand']]
+        test_df = test_df.drop_duplicates()
         for uid, user_rating in tops.items():
             if uid==user:
                 itemList = [iid for (iid,rating) in user_rating]
                 print(itemList)
-                test_df = raw_data[['id','name','manufacturer','brand']]
-                test_df = test_df.drop_duplicates()
+                
                 json = test_df[test_df['id'].isin(itemList)].to_json(orient='records')
-                # name = test_df[test_df['id'].isin(itemList)].name.values.tolist()
-                # lstname = ','.join([str(elm) for elm in name])
                 flag = True
                 return json
         if(flag == False):
