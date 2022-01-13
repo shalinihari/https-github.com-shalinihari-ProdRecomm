@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+     
+        <title>Sentiment Based Product Recommendation System</title>
+     
+    </head>
+<body>
+    <h1> Sentiment Analysis</h1>
+    <p> Provide the text</p>
+</body>
+<form action= "#"" method= 'post'>
+    <p>Form fields:</p>
+    <form action="/action_page.php">
+    <input type="radio" name="Radio1" id="senti" value="SentimentAnalysis" checked=true> Sentiment Analysis
+
+    <input type="radio" name="Radio1" id="userRec" value="UserRecommendation">User Product Recommendation
+
+    <input type="radio"  name="Radio1" id="itemRec" value="ItemRecommendation"> Item Recommendation
+
+        <p><input type= "Input" id ="input_id" name= "Enter Text"></input></p>
+        <p><input type = "button" onclick = "myfunction()" value = "Submit">   </p>
+        <p><label id = "sentiment_value"></label></p>
+    </form>
+        
+
+    </div>
+</form>
+<br>
+<br>
+<script type = "text/javascript">  
+    function myfunction() {   
+        var selectedOption = $("input:radio[name=Radio1]:checked").val()
+        Inp_Value = document.getElementById("input_id").value;
+        var targeturl = '';
+
+        if(Inp_Value==null){
+            alert("Please enter proper value...");
+            return
+        }
+        if(selectedOption == "SentimentAnalysis"){
+            targeturl = '/SentimentAnalysis?param1='+Inp_Value;
+        }
+        if(selectedOption == "UserRecommendation"){
+            targeturl = '/UserRecommendation?param1='+Inp_Value;
+        }
+        if(selectedOption == "ItemRecommendation"){
+            targeturl = '/dummy?param1='+Inp_Value;
+        }
+        $.ajax({
+                 url: targeturl,
+                 type: 'POST',                 
+                 success: function(result) {
+                    document.getElementById("sentiment_value").innerHTML =""    
+                    if(selectedOption == "UserRecommendation"){
+                        if(result == ""){
+                            alert("User not found  ");
+                            return
+                        }
+                        json = JSON.parse(result)
+                        resp = "<table><thead><tr> <th><b>ID</b></th><th><b>Name</b></th><th><b>brand</b></th><th><b>manufacturer</b></th></tr></thead>"
+                        for(count = 0; count < json.length; count++) {
+                            resp += "<tr><td>"+json[count].id+"</td>"
+                            resp += "<td>"+json[count].name+"</td>"
+                            resp += "<td>"+json[count].brand+"</td>"
+                            resp += "<td>"+json[count].manufacturer+"</td></tr>"
+                        }
+                        resp += "</table>"
+                        document.getElementById("sentiment_value").innerHTML =resp    
+                    }else {
+                        document.getElementById("sentiment_value").innerHTML =result    
+                    }           
+                 }
+                     
+             });
+    } 
+   
+    
+</script>  
+
+
+</html>
